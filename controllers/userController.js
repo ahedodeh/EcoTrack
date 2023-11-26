@@ -1,4 +1,4 @@
-const User = require('../models/UserProfile');
+const User = require('../models/userProfile');
 const { authenticateUser } = require('../middleware/authentication');
 const { handleError } = require('../middleware/errHandling');
 
@@ -14,17 +14,26 @@ exports.createUser = (req, res) => {
   });
 };
 
+
+
 exports.searchUsers = (req, res) => {
-  const { interests, location } = req.query;
+    const { interests, location } = req.query;
 
-  User.searchUsers({ interests, location }, (err, results) => {
-    if (err) {
-      return handleError(err, req, res);
-    }
-    res.status(200).json(results);
-  });
+    User.searchUsers({ interests, location }, (err, results) => {
+        if (err) {
+            console.error('Error in searchUsers route handler:', err);
+            res.status(500).json({ error: 'Internal server error' });
+        } else {
+            console.log('Search Users Results:', results);
+
+            if (results.length === 0) {
+                console.log('No users found matching the criteria.');
+            }
+
+            res.status(200).json(results);
+        }
+    });
 };
-
 
 exports.getUser = (req, res) => {
   const userId = req.params.userId;

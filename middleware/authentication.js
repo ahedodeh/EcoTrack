@@ -1,13 +1,14 @@
 const jwt = require('jsonwebtoken');
-const crypto = require('crypto');
 const secretKey = 'abcdef'; 
 
 exports.authenticateUser = (req, res, next) => {
-  const token = req.headers.authorization;
+  const authHeader = req.headers.authorization;
 
-  if (!token) {
-    return res.status(401).json({ error: 'Unauthorized - Token missing' });
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ error: 'Unauthorized - Token missing or invalid format' });
   }
+
+  const token = authHeader.substring('Bearer '.length);
 
   jwt.verify(token, secretKey, (err, decoded) => {
     if (err) {

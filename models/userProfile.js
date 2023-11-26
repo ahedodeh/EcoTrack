@@ -54,29 +54,41 @@ class User {
         connection.query('DELETE FROM users WHERE user_id = ?', [userId], callback);
     }
 
- static searchUsers({ interests, location }, callback) {
-    let searchUsersQuery = 'SELECT * FROM users';
+   static searchUsers({ interests, location }, callback) {
+        let searchUsersQuery = 'SELECT * FROM users';
 
-    if (interests || location) {
-        searchUsersQuery += ' WHERE';
-        
-        if (interests) {
-            searchUsersQuery += ' interests LIKE ?';
+        if (interests || location) {
+            searchUsersQuery += ' WHERE';
+
+            if (interests) {
+                searchUsersQuery += ' interests LIKE ?';
+            }
+
+            if (interests && location) {
+                searchUsersQuery += ' OR';
+            }
+
+            if (location) {
+                searchUsersQuery += ' location LIKE ?';
+            }
         }
 
-        if (interests && location) {
-            searchUsersQuery += ' AND';
+        const searchUsersValues = [];
+
+        if (interests) {
+            searchUsersValues.push(`%${interests}%`);
         }
 
         if (location) {
-            searchUsersQuery += ' location LIKE ?';
-        }
+            searchUsersValues.push(`%${location}%`);
+       }
+       
+       console.log('Generated SQL Query:', searchUsersQuery);
+       console.log('Generated SQL Values:', searchUsersValues);
+
+
+        connection.query(searchUsersQuery, searchUsersValues, callback);
     }
-
-    const searchUsersValues = [`%${interests || ''}%`, `%${location || ''}%`];
-
-    connection.query(searchUsersQuery, searchUsersValues, callback);
-}
 
 static loginUser({ username, password }, callback) {
     const getUserQuery = 'SELECT * FROM users WHERE username = ?';
@@ -91,7 +103,7 @@ static loginUser({ username, password }, callback) {
                     callback(err);
                 } else {
                     if (user.password === decryptResult[0].decryptedPassword) {
-                        const token = jwt.sign({ userId: user.user_id }, secretKey);
+                        const token = jwt.sign({ userId: user.user_id }, secretKey, { expiresIn: '1h' });
                         callback(null, { message: 'Logged in successfully', token });
                     } else {
                         callback({ message: 'Invalid credentials' });
