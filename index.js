@@ -9,7 +9,11 @@ app.use(express.json());
 
 
 const userRoutes = require('./routes/userRoutes');
+const messageRoutes = require('./routes/messageRoutes');
+
 app.use('/api/users', userRoutes);
+app.use('/api/messages', messageRoutes);
+
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
