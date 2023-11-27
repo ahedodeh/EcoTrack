@@ -4,7 +4,6 @@ const { handleError } = require('../middleware/errHandling');
 exports.sendMessages = (req, res) => {
   const { sender_id, receiver_id, message } = req.body;
 
-  // Use req.userId instead of req.user.userId
   const newMessage = {
     sender_id: req.userId,
     receiver_id,

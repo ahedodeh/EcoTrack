@@ -6,14 +6,13 @@ const port = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-
-
 const userRoutes = require('./routes/userRoutes');
 const messageRoutes = require('./routes/messageRoutes');
+const dataSourceRoutes = require('./routes/dataSourceRoutes'); 
 
 app.use('/api/users', userRoutes);
 app.use('/api/messages', messageRoutes);
-
+app.use('/api/dataSources', dataSourceRoutes); 
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
