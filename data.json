@@ -1,0 +1,32 @@
+[
+  {
+    "source_id": 1,
+    "temperature": 25,
+    "humidity": 50,
+    "air_quality": 0.0,
+    "water_quality": 0.0,
+    "biodiversity_metrics": "",
+    "location_lat": 0.0,
+    "location_lon": 0.0
+  },
+  {
+    "source_id": 2,
+    "temperature": 22,
+    "humidity": 55,
+    "air_quality": 0.0,
+    "water_quality": 0.0,
+    "biodiversity_metrics": "",
+    "location_lat": 0.0,
+    "location_lon": 0.0
+  },
+  {
+    "source_id": 3,
+    "temperature": 20,
+    "humidity": 60,
+    "air_quality": 0.0,
+    "water_quality": 0.0,
+    "biodiversity_metrics": "",
+    "location_lat": 0.0,
+    "location_lon": 0.0
+  }
+]

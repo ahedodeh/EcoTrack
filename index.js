@@ -8,11 +8,13 @@ app.use(express.json());
 
 const userRoutes = require('./routes/userRoutes');
 const messageRoutes = require('./routes/messageRoutes');
-const dataSourceRoutes = require('./routes/dataSourceRoutes'); 
+const dataSourceRoutes = require('./routes/dataSourceRoutes');
+const dataUploadRoutes = require('./routes/dataUploadRoutes');
 
 app.use('/api/users', userRoutes);
 app.use('/api/messages', messageRoutes);
-app.use('/api/dataSources', dataSourceRoutes); 
+app.use('/api/dataSources', dataSourceRoutes);
+app.use('/api/dataUpload', dataUploadRoutes); 
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
