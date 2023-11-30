@@ -9,7 +9,7 @@ class Message {
 
     const validateUsersQuery = 'SELECT COUNT(*) AS count FROM users WHERE user_id IN (?, ?)';
     const validateUsersValues = [sender_id, receiver_id];
-``
+
     connection.query(validateUsersQuery, validateUsersValues, (validateErr, userCounts) => {
       if (validateErr) {
         return callback(validateErr);
