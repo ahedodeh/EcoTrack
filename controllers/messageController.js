@@ -2,12 +2,12 @@ const Message = require('../models/message');
 const { handleError } = require('../middleware/errHandling');
 
 exports.sendMessages = (req, res) => {
-  const { sender_id, receiver_id, message } = req.body;
+  const { receiverName, message } = req.body;
 
   const newMessage = {
-    sender_id: req.userId,
-    receiver_id,
+    receiverName,
     message,
+    userId: req.userId, 
   };
 
   Message.sendMessage(newMessage, (err, result) => {
@@ -19,9 +19,9 @@ exports.sendMessages = (req, res) => {
 };
 
 exports.receiveMessages = (req, res) => {
-  const user_id = req.userId;
+  const userId = req.userId;
 
-  Message.receiveMessages(user_id, (err, messages) => {
+  Message.receiveMessages(userId, (err, messages) => {
     if (err) {
       return handleError(err, req, res);
     }

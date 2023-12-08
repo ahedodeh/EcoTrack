@@ -15,7 +15,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/messages', messageRoutes);
 app.use('/api/dataSources', dataSourceRoutes);
 app.use('/api/dataUpload', dataUploadRoutes); 
-app.use('/api/environmentalDataRoutes', environmentalDataRoutes);
+app.use('/api/environmentalData', environmentalDataRoutes);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

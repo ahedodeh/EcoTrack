@@ -36,9 +36,9 @@ exports.searchUsers = (req, res) => {
 };
 
 exports.getUser = (req, res) => {
-  const userId = req.params.userId;
+  const userIdFromToken = req.userId;
 
-  User.getUserById(userId, (err, user) => {
+  User.getUserById(userIdFromToken, (err, user) => {
     if (err) {
       return handleError(err, req, res);
     }
@@ -46,11 +46,13 @@ exports.getUser = (req, res) => {
   });
 };
 
+
+
 exports.updateUser = (req, res) => {
-  const userId = req.params.userId;
+  const userIdFromToken = req.userId;
   const updatedUser = req.body;
 
-  User.updateUser(userId, updatedUser, (err) => {
+  User.updateUser(userIdFromToken, updatedUser, (err) => {
     if (err) {
       return handleError(err, req, res);
     }
@@ -59,10 +61,11 @@ exports.updateUser = (req, res) => {
 };
 
 
-exports.deleteUser = (req, res) => {
-  const userId = req.params.userId;
 
-  User.deleteUser(userId, (err) => {
+exports.deleteUser = (req, res) => {
+  const userIdFromToken = req.userId;
+
+  User.deleteUser(userIdFromToken, (err) => {
     if (err) {
       return handleError(err, req, res);
     }

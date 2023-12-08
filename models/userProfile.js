@@ -38,17 +38,17 @@ class User {
 }
 
 
-    static getUserById(userId, callback) {
-        connection.query('SELECT * FROM users WHERE user_id = ?', [userId], callback);
-    }
+ static getUserById(userId, callback) {
+    connection.query('SELECT * FROM users WHERE user_id = ?', [userId], callback);
+  }
 
-    static updateUser(userId, updatedUser, callback) {
-        const { username, email, location, interests } = updatedUser;
-        const updateUserQuery =
-            'UPDATE users SET username = ?, email = ?, location = ?, interests = ? WHERE user_id = ?';
-        const updateUserValues = [username, email, location, interests, userId];
-        connection.query(updateUserQuery, updateUserValues, callback);
-    }
+  static updateUser(userId, updatedUser, callback) {
+    const { username, email, location, interests } = updatedUser;
+    const updateUserQuery =
+      'UPDATE users SET username = ?, email = ?, location = ?, interests = ? WHERE user_id = ?';
+    const updateUserValues = [username, email, location, interests, userId];
+    connection.query(updateUserQuery, updateUserValues, callback);
+  }
 
     static deleteUser(userId, callback) {
         connection.query('DELETE FROM users WHERE user_id = ?', [userId], callback);
