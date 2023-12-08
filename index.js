@@ -16,7 +16,7 @@ app.use('/api/messages', messageRoutes);
 app.use('/api/dataSources', dataSourceRoutes);
 app.use('/api/dataUpload', dataUploadRoutes); 
 app.use('/api/environmentalData', environmentalDataRoutes);
-console.log('Additional statement for noorBranch');
+
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
