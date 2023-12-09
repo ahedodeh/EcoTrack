@@ -99,6 +99,19 @@ const environmental_data = {
       callback(null, result.affectedRows > 0);
     });
   },
+    fetchData: () => {
+    return new Promise((resolve, reject) => {
+      const sql = 'SELECT * FROM environmental_data';
+      db.query(sql, (err, results) => {
+        if (err) {
+          console.error(err);
+          reject(new Error('Error executing database query: ' + err.message));
+        } else {
+          resolve(results);
+        }
+      });
+    });
+  },
 };
 
 module.exports = environmental_data;

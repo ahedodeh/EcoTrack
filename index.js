@@ -27,8 +27,6 @@ app.use('/api/report', reportRoutes);
 app.use('/api/sustainability', sustainabilityScoreRoutes);
 app.use('/api/openData', openDataRoutes);
 
-console.log("main page");
-
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
