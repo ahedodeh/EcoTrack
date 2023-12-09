@@ -16,6 +16,7 @@ const educationalResourceRoutes = require('./routes/educationalResourceRoutes');
 const reportRoutes = require('./routes/reportRoutes');
 const sustainabilityScoreRoutes = require('./routes/sustainabilityScoreRoutes');
 const openDataRoutes = require('./routes/openDataRoutes');
+const environmentalAlertRoutes = require('./routes/environmentalAlertRoutes');
 app.use('/api/users', userRoutes);
 app.use('/api/messages', messageRoutes);
 app.use('/api/dataSources', dataSourceRoutes);
@@ -26,6 +27,8 @@ app.use('/api/educationalResource', educationalResourceRoutes);
 app.use('/api/report', reportRoutes);
 app.use('/api/sustainability', sustainabilityScoreRoutes);
 app.use('/api/openData', openDataRoutes);
+app.use('/api/environmentalAlert', environmentalAlertRoutes);
+
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
