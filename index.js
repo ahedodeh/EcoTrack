@@ -11,11 +11,14 @@ const messageRoutes = require('./routes/messageRoutes');
 const dataSourceRoutes = require('./routes/dataSourceRoutes');
 const dataUploadRoutes = require('./routes/dataUploadRoutes');
 const environmentalDataRoutes = require('./routes/environmentalDataRoutes');
+const openDataRoutes = require('./routes/openDataRoutes');
+
 app.use('/api/users', userRoutes);
 app.use('/api/messages', messageRoutes);
 app.use('/api/dataSources', dataSourceRoutes);
 app.use('/api/dataUpload', dataUploadRoutes); 
 app.use('/api/environmentalDataRoutes', environmentalDataRoutes);
+app.use('/api/openData', openDataRoutes);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
