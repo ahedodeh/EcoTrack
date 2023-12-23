@@ -1,41 +1,73 @@
 const connection = require('../config/db');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const secretKey = 'abcdef'; 
+const secretKey = 'abcdef';
 
 class User {
 
     static getUserByUsername(username, callback) {
-        connection.query('SELECT * FROM users WHERE username = ?', [username], callback);
-    }
+    connection.query('SELECT * FROM users WHERE username = ?', [username], (err, results) => {
+        if (err) {
+            callback(err);
+        } else {
+            if (results.length > 0) {
+                callback(null, results[0]);
+            } else {
+                callback({ message: 'User not found' });
+            }
+        }
+    });
+}
 
-    static createUser(user, callback) {
+
+   static createUser(user, callback) {
     const { username, email, location, interests, password } = user;
 
-    const checkUserQuery = 'SELECT * FROM users WHERE email = ?';
-        const passwordEncryptionQuery = 'SELECT PASSWORD(?) AS encryptedPassword';
+    // Check if username, email, and password are provided
+    if (!username || !email || !password) {
+        return callback({ status: 400, message: 'Please provide username, email, and password' });
+    }
 
-        connection.query(passwordEncryptionQuery, [password], (err, encryptionResult) => {
-            if (err) {
-                callback(err);
-            } else {
-                const encryptedPassword = encryptionResult[0].encryptedPassword;
+    const checkUserQuery = 'SELECT * FROM users WHERE username = ? OR email = ?';
+    const passwordEncryptionQuery = 'SELECT PASSWORD(?) AS encryptedPassword';
 
-                connection.query(checkUserQuery, [email], (err, results) => {
-                    if (err) {
-                        callback(err);
-                    } else if (results.length > 0) {
-                        callback({ status: 400, message: 'User with this email already exists' });
+    connection.query(passwordEncryptionQuery, [password], (err, encryptionResult) => {
+        if (err) {
+            callback(err);
+        } else {
+            const encryptedPassword = encryptionResult[0].encryptedPassword;
+
+            connection.query(checkUserQuery, [username, email], (err, results) => {
+                if (err) {
+                    callback(err);
+                } else {
+                    if (results.length > 0) {
+                        // User with this username or email already exists
+                        callback({ status: 400, message: 'User with this username or email already exists' });
                     } else {
+                        // Check if location and interests are provided, if not, set them to null
+                        const normalizedLocation = location || null;
+                        const normalizedInterests = interests || null;
+
                         const insertUserQuery =
                             'INSERT INTO users (username, email, location, interests, password) VALUES (?, ?, ?, ?, ?)';
-                        const insertUserValues = [username, email, location, interests, encryptedPassword];
-                        connection.query(insertUserQuery, insertUserValues, callback);
+                        const insertUserValues = [username, email, normalizedLocation, normalizedInterests, encryptedPassword];
+                        
+                        connection.query(insertUserQuery, insertUserValues, (err, insertResult) => {
+                            if (err) {
+                                callback(err);
+                            } else {
+                                // User profile created successfully
+                                callback(null, { message: 'User profile created', userId: insertResult.insertId });
+                            }
+                        });
                     }
-                });
-            }
-        });
+                }
+            });
+        }
+    });
 }
+
 
 
     static getUserById(userId, callback) {
