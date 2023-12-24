@@ -5,12 +5,14 @@ const { handleError } = require('../middleware/errHandling');
 
 const router = express.Router();
 
-router.get('/searchUsers',authenticateUser, userController.searchUsers);
-router.post('/', userController.createUser); 
-router.get('/profile', authenticateUser, userController.getUser); 
-router.put('/profile',authenticateUser, userController.updateUser);
-router.delete('/profile', authenticateUser, userController.deleteUser); 
-router.post('/login', userController.login); 
+router.get('/searchUsers', authenticateUser, userController.searchUsers);
+router.post('/', userController.createUser);
+router.post('/login', userController.login);
+
+router.get('/profile', authenticateUser, userController.getUser);
+router.put('/profile', authenticateUser, userController.updateUser);
+
+router.delete('/profile', authenticateUser, userController.deleteUser);
 
 router.use(handleError);
 
