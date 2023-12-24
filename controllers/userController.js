@@ -61,10 +61,10 @@ exports.updateUser = (req, res) => {
       return handleError(err, req, res);
     }
 
-    if (result.status) {
+    if (result && result.status) {
       res.status(result.status).json({ message: result.message });
     } else {
-      res.status(200).json({ message: result.message });
+      res.status(200).json({ message: 'User profile updated' });
     }
   });
 };
