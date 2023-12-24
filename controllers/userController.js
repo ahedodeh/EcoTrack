@@ -54,10 +54,10 @@ exports.getUser = (req, res) => {
 };
 
 exports.updateUser = (req, res) => {
-  const userId = req.userId;
-  const updatedUserData = req.body;
+  const userIdFromToken = req.userId;
+  const updatedUser = req.body;
 
-  User.updateUser(userId, updatedUserData, (err, result) => {
+  User.updateUser(userIdFromToken, updatedUser, (err, result) => {
     if (err) {
       return handleError(err, req, res);
     }
