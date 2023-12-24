@@ -54,20 +54,22 @@ exports.getUser = (req, res) => {
 };
 
 exports.updateUser = (req, res) => {
-  const userIdFromToken = req.userId;
-  const updatedUser = req.body;
-  User.updateUser(userIdFromToken, updatedUser, (err, result) => {
+  const userId = req.userId;
+  const updatedUserData = req.body;
+
+  User.updateUser(userId, updatedUserData, (err, result) => {
     if (err) {
       return handleError(err, req, res);
     }
 
-    if (result && result.status) {
+    if (result.status) {
       res.status(result.status).json({ message: result.message });
     } else {
-      res.status(200).json({ message: 'User profile updated' });
+      res.status(200).json({ message: result.message });
     }
   });
 };
+
 
 
 exports.deleteUser = (req, res) => {
