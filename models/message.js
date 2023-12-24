@@ -1,24 +1,27 @@
 const connection = require('../config/db');
 
 class Message {
-  static sendMessage({ sender_id, receiver_id, message }, callback) {
-    if (!sender_id || !receiver_id || !message) {
-      const error = new Error('Missing sender_id, receiver_id, or message');
+  static sendMessage({ receiverName, message, userId }, callback) {
+    if (!receiverName || !message || !userId) {
+      const error = new Error('Missing receiverName, message, or userId');
       return callback(error);
     }
 
-    const validateUsersQuery = 'SELECT COUNT(*) AS count FROM users WHERE user_id IN (?, ?)';
-    const validateUsersValues = [sender_id, receiver_id];
+    const validateSenderQuery = 'SELECT user_id FROM users WHERE username = ?';
+    const validateSenderValues = [receiverName];
 
-    connection.query(validateUsersQuery, validateUsersValues, (validateErr, userCounts) => {
+    connection.query(validateSenderQuery, validateSenderValues, (validateErr, senderResult) => {
       if (validateErr) {
         return callback(validateErr);
       }
 
-      if (userCounts[0].count !== 2) {
-        const error = new Error('Invalid sender_id or receiver_id');
+      if (senderResult.length === 0) {
+        const error = new Error('Invalid receiverName');
         return callback(error);
       }
+
+      const sender_id = userId;
+      const receiver_id =  senderResult[0].user_id;   
 
       const sendMessageQuery = 'INSERT INTO messages (sender_id, receiver_id, message) VALUES (?, ?, ?)';
       const sendMessageValues = [sender_id, receiver_id, message];
@@ -27,14 +30,14 @@ class Message {
     });
   }
 
-  static receiveMessages(user_id, callback) {
-    if (!user_id) {
-      const error = new Error('Missing user_id');
+  static receiveMessages(userId, callback) {
+    if (!userId) {
+      const error = new Error('Missing userId');
       return callback(error);
     }
 
     const validateUserQuery = 'SELECT COUNT(*) AS count FROM users WHERE user_id = ?';
-    const validateUserValues = [user_id];
+    const validateUserValues = [userId];
 
     connection.query(validateUserQuery, validateUserValues, (validateErr, userCounts) => {
       if (validateErr) {
@@ -42,12 +45,12 @@ class Message {
       }
 
       if (userCounts[0].count !== 1) {
-        const error = new Error('Invalid user_id');
+        const error = new Error('Invalid userId');
         return callback(error);
       }
 
-      const receiveMessagesQuery = 'SELECT * FROM messages WHERE sender_id = ? OR receiver_id = ?';
-      const receiveMessagesValues = [user_id, user_id];
+      const receiveMessagesQuery = 'SELECT * FROM messages WHERE  receiver_id = ?';
+      const receiveMessagesValues = [userId, userId];
 
       connection.query(receiveMessagesQuery, receiveMessagesValues, callback);
     });

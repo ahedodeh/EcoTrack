@@ -1,7 +1,18 @@
 const db = require('../config/db');
 
+const incrementUserScore = (userId) => {
+  const updateScoreSql = 'UPDATE users SET score = score + 1 WHERE user_id = ?';
+  const updateScoreValues = [userId];
+
+  db.query(updateScoreSql, updateScoreValues, (err) => {
+    if (err) {
+      console.error('Error updating user score:', err);
+    }
+  });
+};
+
 const environmental_data = {
-  create: (data, callback) => {
+  create: (data, userId, callback) => {
     const {
       source_id,
       air_quality,
@@ -14,9 +25,10 @@ const environmental_data = {
       file_url,
     } = data;
 
-    let sql = `
-      INSERT INTO environmental_data (source_id, air_quality, temperature, humidity, water_quality, biodiversity_metrics, location_lat, location_lon, file_url)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    const sql = `
+      INSERT INTO environmental_data 
+        (source_id, air_quality, temperature, humidity, water_quality, biodiversity_metrics, location_lat, location_lon, file_url, user_id)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
     const values = [
@@ -29,6 +41,7 @@ const environmental_data = {
       location_lat || null,
       location_lon || null,
       file_url || null,
+      userId,
     ];
 
     db.query(sql, values, (err, result) => {
@@ -37,10 +50,12 @@ const environmental_data = {
         return callback(err, null);
       }
       const insertedId = result.insertId;
+      // Increment user's score here if needed
+      incrementUserScore(userId);
       callback(null, insertedId);
     });
   },
-
+  
   findById: (data_id, callback) => {
     const sql = 'SELECT * FROM environmental_data WHERE data_id = ?';
     const values = [data_id];

@@ -53,6 +53,8 @@ exports.getUser = (req, res) => {
   });
 };
 
+
+
 exports.updateUser = (req, res) => {
   const userIdFromToken = req.userId;
   const updatedUser = req.body;
