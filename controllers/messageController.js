@@ -11,10 +11,11 @@ exports.sendMessages = (req, res) => {
   };
 
   Message.sendMessage(newMessage, (err, result) => {
-    if (err) {
-      return handleError(err, req, res);
-    }
-    res.status(201).json({ message: 'Message sent successfully' });
+if (err) {
+  return res.status(500).json({ error: err.message });  
+}
+res.status(201).json({ message: 'Message sent successfully' });  
+
   });
 };
 
