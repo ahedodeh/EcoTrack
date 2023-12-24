@@ -57,16 +57,14 @@ exports.updateUser = (req, res) => {
   const userIdFromToken = req.userId;
   const updatedUser = req.body;
 
-  User.updateUser(userIdFromToken, updatedUser, (err, result) => {
+  User.updateUser(userIdFromToken, updatedUser, (err) => {
     if (err) {
       return handleError(err, req, res);
     }
 
-    if (result.status) {
-      res.status(result.status).json({ message: result.message });
-    } else {
-      res.status(200).json({ message: result.message });
-    }
+    const status = 200; 
+    const message = 'User profile updated';
+    res.status(status).json({ message });
   });
 };
 
