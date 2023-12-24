@@ -5,10 +5,10 @@ const { handleError } = require('../middleware/errHandling');
 
 const router = express.Router();
 
-router.get('/searchUsers', userController.searchUsers);
+router.get('/searchUsers',authenticateUser, userController.searchUsers);
 router.post('/', userController.createUser); 
 router.get('/:userId', authenticateUser, userController.getUser); 
-router.put('/:userId', userController.updateUser);
+router.put('/:userId',authenticateUser, userController.updateUser);
 router.delete('/:userId', authenticateUser, userController.deleteUser); 
 router.post('/login', userController.login); 
 

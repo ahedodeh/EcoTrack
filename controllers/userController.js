@@ -2,18 +2,19 @@ const User = require('../models/userProfile');
 const { authenticateUser } = require('../middleware/authentication');
 const { handleError } = require('../middleware/errHandling');
 
-
 exports.createUser = (req, res) => {
   const newUser = req.body;
 
   User.createUser(newUser, (err, result) => {
     if (err) {
       return handleError(err, req, res);
+    } else if (result.status === 201) {
+      res.status(201).json({ message: result.message });
+    } else {
+      res.status(result.status).json({ message: result.message });
     }
-    res.status(201).json({ message: 'User profile created' });
   });
 };
-
 
 
 exports.searchUsers = (req, res) => {
@@ -21,23 +22,28 @@ exports.searchUsers = (req, res) => {
 
     User.searchUsers({ interests, location }, (err, results) => {
         if (err) {
-            console.error('Error in searchUsers route handler:', err);
-            res.status(500).json({ error: 'Internal server error' });
-        } else {
-            console.log('Search Users Results:', results);
-
-            if (results.length === 0) {
-                console.log('No users found matching the criteria.');
+            if (err.status && err.message) {
+                return res.status(err.status).json({ error: err.message });
+            } else {
+                return res.status(500).json({ error: 'Internal server error' });
             }
-
-            res.status(200).json(results);
         }
+        const sanitizedResults = results.map(user => {
+            return {
+                username: user.username,
+                email: user.email,
+                location: user.location,
+                interests: user.interests
+            };
+        });
+
+        res.status(200).json(sanitizedResults);
     });
 };
 
-exports.getUser = (req, res) => {
-  const userId = req.params.userId;
 
+exports.getUser = (req, res) => {
+  const userId = req.userId;
   User.getUserById(userId, (err, user) => {
     if (err) {
       return handleError(err, req, res);
@@ -47,20 +53,24 @@ exports.getUser = (req, res) => {
 };
 
 exports.updateUser = (req, res) => {
-  const userId = req.params.userId;
-  const updatedUser = req.body;
-
-  User.updateUser(userId, updatedUser, (err) => {
+  const userId = req.userId;
+  const updatedUserData = req.body;
+  User.updateUser(userId, updatedUserData, (err, result) => {
     if (err) {
       return handleError(err, req, res);
     }
-    res.status(200).json({ message: 'User profile updated' });
+
+    if (result.status) {
+      res.status(result.status).json({ message: result.message });
+    } else {
+      res.status(200).json({ message: result.message });
+    }
   });
 };
 
 
 exports.deleteUser = (req, res) => {
-  const userId = req.params.userId;
+  const userId = req.userId;
 
   User.deleteUser(userId, (err) => {
     if (err) {
@@ -74,13 +84,14 @@ exports.deleteUser = (req, res) => {
 exports.login = (req, res) => {
   const { username, password } = req.body;
 
-  User.loginUser({ username, password }, (err, user) => {
+  User.loginUser({ username, password }, (err, result) => {
     if (err) {
       return handleError(err, req, res);
-    } else if (user) {
-      res.status(200).json({ message: 'Logged in successfully', token: user.token });
+    } else if (result.status === 200) {
+      res.status(200).json({ message: result.message, token: result.token });
     } else {
-      res.status(401).json({ message: 'Invalid credentials' });
+      res.status(result.status).json({ message: result.message });
     }
   });
 };
+
