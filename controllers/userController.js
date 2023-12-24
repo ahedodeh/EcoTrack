@@ -44,6 +44,7 @@ exports.searchUsers = (req, res) => {
 
 exports.getUser = (req, res) => {
   const userIdFromToken = req.userId;
+
   User.getUserById(userIdFromToken, (err, user) => {
     if (err) {
       return handleError(err, req, res);
