@@ -9,7 +9,7 @@ router.get('/searchUsers',authenticateUser, userController.searchUsers);
 router.post('/', userController.createUser); 
 router.get('/profile', authenticateUser, userController.getUser); 
 router.put('/profile',authenticateUser, userController.updateUser);
-router.delete('/', authenticateUser, userController.deleteUser); 
+router.delete('/profile', authenticateUser, userController.deleteUser); 
 router.post('/login', userController.login); 
 
 router.use(handleError);
