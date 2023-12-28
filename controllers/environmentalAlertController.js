@@ -3,13 +3,11 @@ const EnvironmentalData = require('../models/environmentalData');
 
 const checkAndGenerateAlerts = async () => {
   try {
-    // Fetch environmental data from the "environmental_data" table
     const environmentalData = await EnvironmentalData.fetchData();
     console.log(environmentalData);
     environmentalData.forEach((data) => {
       const { source_id, air_quality, temperature, humidity } = data;
 
-      // Example threshold checks
       const userThresholds = {
         airQualityThreshold: 50, // Example threshold value for air quality
         temperatureThreshold: 30, // Example threshold value for temperature

@@ -90,11 +90,13 @@ class EnvironmentalData {
       }
     });
   }
+
 }
 
 function calculateAverage(data, attribute) {
   const total = data.reduce((sum, record) => sum + record[attribute], 0);
   return total / data.length;
 }
+
 
 module.exports = EnvironmentalData;

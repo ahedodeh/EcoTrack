@@ -50,7 +50,6 @@ const environmental_data = {
         return callback(err, null);
       }
       const insertedId = result.insertId;
-      // Increment user's score here if needed
       incrementUserScore(userId);
       callback(null, insertedId);
     });
