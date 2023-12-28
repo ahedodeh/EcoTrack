@@ -1,14 +1,17 @@
 const environmentalData = require('../models/environmentalData');
 
+
 exports.createEnvironmentalData = (req, res) => {
-  const userIdFromToken = req.userId; 
+  const userIdFromToken = req.userId;
   const data = req.body;
 
-  environmentalData.create(data, userIdFromToken, (err, result) => {
+  environmentalData.create(data, userIdFromToken, (err, result, message) => {
     if (err) {
+      console.error('Error creating environmental data record:', err);
+      return res.status(500).json({ error: message });
     }
 
-    res.status(201).json({ message: 'Environmental data created successfully', dataId: result });
+    res.status(201).json({ message: message });
   });
 };
 

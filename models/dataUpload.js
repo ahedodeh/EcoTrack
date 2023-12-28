@@ -1,7 +1,6 @@
 const { ref, uploadBytes, deleteObject, listAll } = require("firebase/storage");
 const storage = require("../config/firebase");
 
-const allowedImageFolderNames = ["images"];
 const allowedFileFolderNames = ["files"];
 
 exports.deleteFile = async (folderName, fileName) => {
