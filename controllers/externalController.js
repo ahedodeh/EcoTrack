@@ -1,15 +1,6 @@
 const ecoTrackModel = require('../models/external');
 
 const ecoTrackController = {
-  getWeather: async (req, res, next) => {
-    try {
-      const { city, country } = req.query;
-      const weatherData = await ecoTrackModel.getWeatherData(city, country);
-      res.json(weatherData);
-    } catch (error) {
-      next(error);
-    }
-  },
 
   getOpenWeatherMapData: async (req, res, next) => {
     try {
