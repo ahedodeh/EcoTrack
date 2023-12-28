@@ -5,6 +5,6 @@ const { authenticateUser } = require('../middleware/authentication');
 const router = express.Router();
 
 
-router.post('/notificate', EnvironmentalAlertController.checkAndGenerateAlerts);
+router.post('/notificate',authenticateUser, EnvironmentalAlertController.checkAndGenerateAlerts);
 
 module.exports = router;
