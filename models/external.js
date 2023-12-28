@@ -1,22 +1,6 @@
 const axios = require('axios');
 
-const getWeatherData = async (city, country) => {
-  const apiKey = '7520f34dcf2c4a53bef13518230312';
-  const apiUrl = 'https://api.weatherapi.com/v1/current.json';
 
-  try {
-    const response = await axios.get(apiUrl, {
-      params: {
-        key: apiKey,
-        q: `${city},${country}`,
-      },
-    });
-
-    return response.data;
-  } catch (error) {
-    throw new Error(`Error fetching weather API: ${error.message}`);
-  }
-};
 
 const getOpenWeatherMapData = async (city, country) => {
   const apiKey = '54c670aef2e4dc50697c989f76b1a370';
@@ -71,7 +55,6 @@ const getUVIndexData = async (latitude, longitude) => {
 
 
 module.exports = {
-    getWeatherData,
     getAirQualityDataByZipCode,
     getOpenWeatherMapData,
     getUVIndexData,
