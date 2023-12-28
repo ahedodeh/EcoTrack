@@ -14,12 +14,12 @@ class SustainabilityScore {
   }
 
   static getTopScores(limit, callback) {
-    const sql = 'SELECT user_id, score FROM users ORDER BY score DESC LIMIT ?';
+    const sql = 'SELECT username, score FROM users ORDER BY score DESC LIMIT ?';
     db.query(sql, [limit], callback);
   }
 
   static getLowestScores(limit, callback) {
-    const sql = 'SELECT user_id, score FROM users ORDER BY score ASC LIMIT ?';
+    const sql = 'SELECT username, score FROM users ORDER BY score ASC LIMIT ?';
     db.query(sql, [limit], callback);
   }
 }
