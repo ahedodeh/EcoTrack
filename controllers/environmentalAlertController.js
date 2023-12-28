@@ -1,36 +1,48 @@
 const EnvironmentalAlert = require('../models/environmentalAlert');
 const EnvironmentalData = require('../models/environmentalData');
 
-const checkAndGenerateAlerts = async () => {
+const checkAndGenerateAlerts = async (req, res) => {
   try {
     const environmentalData = await EnvironmentalData.fetchData();
-    console.log(environmentalData);
+    const alerts = [];
+
     environmentalData.forEach((data) => {
-      const { source_id, air_quality, temperature, humidity } = data;
+      const { data_id, air_quality, temperature, humidity } = data;
 
       const userThresholds = {
-        airQualityThreshold: 50, // Example threshold value for air quality
-        temperatureThreshold: 30, // Example threshold value for temperature
-        humidityThreshold: 60, // Example threshold value for humidity
+        airQualityThreshold: 50,
+        temperatureThreshold: 30,
+        humidityThreshold: 60,
       };
 
       if (air_quality > userThresholds.airQualityThreshold) {
-        EnvironmentalAlert.saveEnvironmentalAlert(source_id, 'High air quality detected');
+        const message = `High air quality detected: ${air_quality}`;
+        EnvironmentalAlert.saveEnvironmentalAlert(data_id, message);
+        alerts.push({ data_id, message });
       }
 
       if (temperature > userThresholds.temperatureThreshold) {
-        EnvironmentalAlert.saveEnvironmentalAlert(source_id, 'High temperature detected');
+        const message = `High temperature detected: ${temperature}`;
+        EnvironmentalAlert.saveEnvironmentalAlert(data_id, message);
+        alerts.push({ data_id, message });
       }
 
       if (humidity > userThresholds.humidityThreshold) {
-        EnvironmentalAlert.saveEnvironmentalAlert(source_id, 'High humidity detected');
+        const message = `High humidity detected: ${humidity}`;
+        EnvironmentalAlert.saveEnvironmentalAlert(data_id, message);
+        alerts.push({ data_id, message });
       }
-
-      // Add more threshold checks as per your requirements
     });
+
+    console.log('Alerts generated:');
+    alerts.forEach((alert) => {
+      console.log(`Data ID: ${alert.data_id}, Message: ${alert.message}`);
+    });
+
+    res.status(200).json({ message: 'Alerts generated successfully', alerts });
   } catch (error) {
-    // Handle error appropriately
     console.error('Error generating alerts:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
